@@ -9,9 +9,40 @@ export default function App() {
   const [status, setStatus] = useState('');
   const [page, setPage] = useState(1);
 
+  // ✅ NEW STATE (for create task)
+  const [title, setTitle] = useState('');
+
   const { tasks, total, loading, error } = useTasks(query, status, page, 10);
 
   const totalPages = Math.ceil(total / 10);
+
+  // ✅ CREATE TASK FUNCTION
+  const handleAddTask = async () => {
+    if (!title.trim()) {
+      alert("Title is required");
+      return;
+    }
+
+    try {
+      await fetch("http://localhost:8080/tasks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          status: "OPEN",
+          priority: "MEDIUM",
+        }),
+      });
+
+      setTitle('');
+      window.location.reload(); // simple refresh (acceptable for assignment)
+    } catch (err) {
+      console.error(err);
+      alert("Error creating task");
+    }
+  };
 
   return (
     <div className="app">
@@ -19,6 +50,17 @@ export default function App() {
         <h1>Task Tracker</h1>
         <p className="subtitle">Internal task management</p>
       </header>
+
+      {/* ✅ ADD TASK UI */}
+      <div className="add-task" style={{ marginBottom: "20px" }}>
+        <input
+          type="text"
+          placeholder="Enter task title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <button onClick={handleAddTask}>Add Task</button>
+      </div>
 
       <div className="controls">
         <SearchBar value={query} onChange={setQuery} />
