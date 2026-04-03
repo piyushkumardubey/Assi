@@ -9,16 +9,23 @@ export function useTasks(query, status, page, pageSize) {
 
   useEffect(() => {
     setLoading(true);
+    setError(null);
 
-    fetchTasks({ query, status, page, pageSize })
+    // FIX: handle "ALL" or empty status
+    const statusParam = !status || status === "ALL" ? "" : status;
+
+    fetchTasks({ query, status: statusParam, page, pageSize })
       .then((data) => {
-        setTasks(data.items);
-        setTotal(data.total);
-        setLoading(false);
+        setTasks(data.items || []);
+        setTotal(data.total || 0);
       })
       .catch((err) => {
         setError(err.message);
+      })
+      .finally(() => {
+        setLoading(false); // always stop loading
       });
+
   }, [query, status, page, pageSize]);
 
   return { tasks, total, loading, error };
