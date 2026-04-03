@@ -11,7 +11,7 @@ export function useTasks(query, status, page, pageSize) {
     setLoading(true);
     setError(null);
 
-    // FIX: handle "ALL" or empty status
+    //  FIX: handle ALL status
     const statusParam = !status || status === "ALL" ? "" : status;
 
     fetchTasks({ query, status: statusParam, page, pageSize })
@@ -23,7 +23,7 @@ export function useTasks(query, status, page, pageSize) {
         setError(err.message);
       })
       .finally(() => {
-        setLoading(false); // always stop loading
+        setLoading(false);
       });
 
   }, [query, status, page, pageSize]);
