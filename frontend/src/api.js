@@ -1,10 +1,12 @@
 const API_BASE = '/api';
 
-// ✅ GET TASKS
+//  FETCH TASKS (FIXED SEARCH PARAM)
 export async function fetchTasks({ query = '', status = '', page = 1, pageSize = 10 }) {
   const params = new URLSearchParams();
 
-  if (query) params.set('q', query);
+  // 🔥 FIX: use correct param (NOT 'q')
+  if (query) params.set('query', query);
+
   if (status) params.set('status', status);
   params.set('page', String(page));
   params.set('pageSize', String(pageSize));
@@ -21,7 +23,7 @@ export async function fetchTasks({ query = '', status = '', page = 1, pageSize =
   return response.json();
 }
 
-// ✅ CREATE TASK (NEW)
+// CREATE TASK
 export async function createTask(taskData) {
   const response = await fetch(`${API_BASE}/tasks`, {
     method: 'POST',
