@@ -1,11 +1,10 @@
-export default function SearchBar({ value, onChange }) {
+export default function StatusFilter({ value, onChange }) {
   return (
-    <input
-      type="text"
-      className="search-input"
-      placeholder="Search tasks..."
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-    />
+    <select value={value} onChange={(e) => onChange(e.target.value)}>
+      <option value="">All statuses</option>
+      <option value="OPEN">OPEN</option>
+      <option value="IN_PROGRESS">IN_PROGRESS</option>
+      <option value="DONE">DONE</option>
+    </select>
   );
 }
